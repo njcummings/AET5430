@@ -2,7 +2,7 @@
 //  GainEffectProcessor.h
 //  ChorusReverbPlugin
 //
-//  Created by Nick Cummings on 3/6/25.
+//  Created by Nick Cummings on 4/9/25.
 //
 
 #pragma once

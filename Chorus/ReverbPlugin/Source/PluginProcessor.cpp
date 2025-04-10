@@ -140,7 +140,8 @@ void Chorus_ReverbPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& 
    
     int N = buffer.getSamples();
     
-    gain.setGaindB(-12.f);
+    gain.setGaindB(gainValue);
+    filter.setFreq(freqValue);
     
     gain.processBuffer(buffer, totalNumInputChannels, N);
     
@@ -148,6 +149,10 @@ void Chorus_ReverbPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& 
    
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
+        effect.processBuffer(buffer,channel,N);
+    }
+    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+        
         auto* channelData = buffer.getWritePointer (channel);
 
         // ..do something to the data...

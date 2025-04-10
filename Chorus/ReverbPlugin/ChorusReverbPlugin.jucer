@@ -4,6 +4,8 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="hsBRrY" name="Chorus/ReverbPlugin">
     <GROUP id="{B430F95F-7ADC-AA57-60CB-04D717A6D80A}" name="Source">
+      <FILE id="KaDMZU" name="GainEffectProcessor.h" compile="0" resource="0"
+            file="GainEffectProcessor.h"/>
       <FILE id="N9Fd94" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="SdfKu7" name="PluginProcessor.h" compile="0" resource="0"
