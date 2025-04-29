@@ -142,15 +142,15 @@ bool Chorus_ReverbPluginAudioProcessor::isBusesLayoutSupported (const BusesLayou
     // load plugins that support stereo bus layouts.
     if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
      && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
-        return false;
+       return false;
 
-    // This checks if the input layout matches the output layout
+     //This checks if the input layout matches the output layout
    #if ! JucePlugin_IsSynth
     if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
         return false;
    #endif
 
-    return true;
+   return true;
   #endif
 }
 #endif
@@ -174,30 +174,31 @@ void Chorus_ReverbPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     reverb.process(context);
 }
 
-void Chorus_ReverbPluginAudioProcessor::createParameters()
-{
-    apvts.reset(new juce::AudioProcessorValueTreeState(*this, nullptr, "Parameters", createParameterLayout()));
-}
-juce::AudioProcessorValueTreeState::ParameterLayout Chorus_ReverbPluginAudioProcessor::createParameterLayout(){
-    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+//void Chorus_ReverbPluginAudioProcessor::createParameters()
+//{
+//    apvts.reset(new juce::AudioProcessorValueTreeState(*this, nullptr, "Parameters", createParameterLayout()));
+//}
+//juce::AudioProcessorValueTreeState::ParameterLayout Chorus_ReverbPluginAudioProcessor::createParameterLayout()
+//{
+ //   juce::AudioProcessorValueTreeState::ParameterLayout layout;
     
     //Chorus parameters
-    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusRate","Chorus Rate", juce::NormalisableRange<float>(0.1f,5.0f,0.01f,0.5f),1.0f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusDepth","Chorus Depth", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.25f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusDelay","Chorus Delay", juce::NormalisableRange<float>(1.0f,20.0f,0.01f),7.0f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusFeedback","Chorus Feedback", juce::NormalisableRange<float>(-1.0f,1.0f,0.01f),0.0f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusMix","Chorus Mix", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
+  //  layout.add(std::make_unique<juce::AudioParameterFloat>("chorusRate","Chorus Rate", juce::NormalisableRange<float>(0.1f,5.0f,0.01f,0.5f),1.0f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("chorusDepth","Chorus Depth", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.25f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("chorusDelay","Chorus Delay", juce::NormalisableRange<float>(1.0f,20.0f,0.01f),7.0f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("chorusFeedback","Chorus Feedback", juce::NormalisableRange<float>(-1.0f,1.0f,0.01f),0.0f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("chorusMix","Chorus Mix", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
     
     //reverb parameters
-    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbRoomSize","Room Size", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbDamping","Damping", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbDryLevel","Dry Level", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.4f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbWetLevel","Wet Level", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.33f));
-    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbWidth","Width", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),1.0f));
-    layout.add(std::make_unique<juce::AudioParameterBool>("reverbFreeze","Freeze Mode", false));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("reverbRoomSize","Room Size", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("reverbDamping","Damping", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("reverbDryLevel","Dry Level", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.4f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("reverbWetLevel","Wet Level", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.33f));
+   // layout.add(std::make_unique<juce::AudioParameterFloat>("reverbWidth","Width", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),1.0f));
+   // layout.add(std::make_unique<juce::AudioParameterBool>("reverbFreeze","Freeze Mode", false));
     
-    return layout;
-}
+  //  return layout;
+//}
 //==============================================================================
 bool Chorus_ReverbPluginAudioProcessor::hasEditor() const
 {
