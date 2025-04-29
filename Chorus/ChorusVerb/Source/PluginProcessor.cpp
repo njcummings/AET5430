@@ -93,8 +93,34 @@ void Chorus_ReverbPluginAudioProcessor::changeProgramName (int index, const juce
 //==============================================================================
 void Chorus_ReverbPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    //Prepare chorus
+    juce::dsp::ProcessSpec spec;
+    spec.sampleRate = sampleRate;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
+    
+    chorus.prepare(spec);
+    chorus.setRate(chorusRate);
+    chorus.setDepth(chorusDepth);
+    chorus.setCentreDelay(chorusDelay);
+    chorus.setFeedback(chorusFeedback);
+    chorus.setMix(chorusMix);
+    
+    //Prepare reverb
+    reverb.prepare(spec);
+    
+    //Update reverb parameters
+    reverbParams.roomSize = reverbRoomSize;
+    reverbParams.damping = reverbDamping;
+    reverbParams.wetLevel = reverbWetLevel;
+    reverbParams.dryLevel = reverbDryLevel;
+    reverbParams.width = reverbWidth;
+    reverbParams.freezeMode = reverbFreezeMode;
+    
+    reverb.setParameters(reverbParams);
+    
+    //Prepare temp buffer
+    tempBuffer.setSize(getTotalNumOutputChannels(), samplesPerBlock);
 }
 
 void Chorus_ReverbPluginAudioProcessor::releaseResources()
@@ -138,27 +164,40 @@ void Chorus_ReverbPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear(i, 0, buffer.getNumSamples());
    
-    int N = buffer.getSamples();
+   // Apply chorus
+    juce::dsp::AudioBlock<float> block(buffer);
     
-    gain.setGaindB(gainValue);
-    filter.setFreq(freqValue);
+    juce::dsp::ProcessContextReplacing<float> context(block);
+    chorus.process(context);
     
-    gain.processBuffer(buffer, totalNumInputChannels, N);
-    
-
-   
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        effect.processBuffer(buffer,channel,N);
-    }
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-        
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
-    }
+    //Apply reverb
+    reverb.process(context);
 }
 
+void Chorus_ReverbPluginAudioProcessor::createParameters()
+{
+    apvts.reset(new juce::AudioProcessorValueTreeState(*this, nullptr, "Parameters", createParameterLayout()));
+}
+juce::AudioProcessorValueTreeState::ParameterLayout Chorus_ReverbPluginAudioProcessor::createParameterLayout(){
+    juce::AudioProcessorValueTreeState::ParameterLayout layout;
+    
+    //Chorus parameters
+    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusRate","Chorus Rate", juce::NormalisableRange<float>(0.1f,5.0f,0.01f,0.5f),1.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusDepth","Chorus Depth", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.25f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusDelay","Chorus Delay", juce::NormalisableRange<float>(1.0f,20.0f,0.01f),7.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusFeedback","Chorus Feedback", juce::NormalisableRange<float>(-1.0f,1.0f,0.01f),0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("chorusMix","Chorus Mix", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
+    
+    //reverb parameters
+    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbRoomSize","Room Size", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbDamping","Damping", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.5f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbDryLevel","Dry Level", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.4f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbWetLevel","Wet Level", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),0.33f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>("reverbWidth","Width", juce::NormalisableRange<float>(0.0f,1.0f,0.01f),1.0f));
+    layout.add(std::make_unique<juce::AudioParameterBool>("reverbFreeze","Freeze Mode", false));
+    
+    return layout;
+}
 //==============================================================================
 bool Chorus_ReverbPluginAudioProcessor::hasEditor() const
 {

@@ -4,8 +4,6 @@
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
   <MAINGROUP id="hsBRrY" name="Chorus/ReverbPlugin">
     <GROUP id="{B430F95F-7ADC-AA57-60CB-04D717A6D80A}" name="Source">
-      <FILE id="KaDMZU" name="GainEffectProcessor.h" compile="0" resource="0"
-            file="GainEffectProcessor.h"/>
       <FILE id="N9Fd94" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="SdfKu7" name="PluginProcessor.h" compile="0" resource="0"
@@ -25,6 +23,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
@@ -50,6 +49,7 @@
         <MODULEPATH id="juce_graphics" path="../../../Downloads/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../../Downloads/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../Downloads/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../Downloads/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>

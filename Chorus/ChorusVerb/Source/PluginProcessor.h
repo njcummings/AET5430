@@ -9,7 +9,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "GainEffectProcessor.h"
+#include <juce_audio_processors/juce_audio_processors.h>
+
 
 //==============================================================================
 /**
@@ -54,22 +55,33 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    static const bool BYPASSED_DEFAULT = false;
+    juce::AudioProcessorValueTreeState&getAPVTS() {return *apvts;}
     
-    bool isBypassed = BYPASSED_DEFAULT;
+    private:
+    //Chorus Parameters
+    juce::dsp::Chorus<float> chorus;
+    float chorusRate = 1.0f;
+    float chorusDepth = 0.25f;
+    float chorusDelay = 7.0f;
+    float chorusFeedback = 0.0f;
+    float chorusMix = 0.5f;
     
-    static constexpr float GAIN_DEFAULT = 0.f;
+    //Reverb Parameters
+    juce::dsp::Reverb reverb;
+    juce::dsp::Reverb::Parameters reverbParams;
+    float reverbRoomSize = 0.5f;
+    float reverbDamping = 0.5f;
+    float reverbWetLevel = 0.33f;
+    float reverbDryLevel = 0.4f;
+    float reverbWidth = 1.0f;
+    float reverbFreezeMode = 0.0f;
     
-    float gainValue = GAIN_DEFAULT;
+    //Audio Buffer
+    juce::AudioBuffer<float> tempBuffer;
     
-    static constexpr float FREQ_DEFAULT = 1000.f;
+    std::unique_ptr<juce::AudioProcessorValueTreeState> apvts;
     
-    float freqValue = FREQ_DEFAULT;
-    
-private:
-    
-    GainEffectProcessor gain;
-    
+    void createParameters();
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Chorus_ReverbPluginAudioProcessor)
 };
